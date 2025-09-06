@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"  // Change from "sqlite"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASE_POSTGRES_URL_NO_SSL")
 }
 
 model QuizScore {

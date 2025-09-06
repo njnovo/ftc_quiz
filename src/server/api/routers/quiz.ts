@@ -6,10 +6,32 @@ import {
 } from "~/server/api/trpc";
 
 export const quizRouter = createTRPCRouter({
+  testConnection: publicProcedure
+    .query(async ({ ctx }) => {
+      try {
+        const count = await ctx.db.quizScore.count();
+        return { 
+          success: true, 
+          count, 
+          databaseType: ctx.db.constructor.name,
+          isMock: ctx.db.constructor.name === 'Object'
+        };
+      } catch (error) {
+        return { 
+          success: false, 
+          error: error instanceof Error ? error.message : 'Unknown error',
+          databaseType: ctx.db.constructor.name,
+          isMock: ctx.db.constructor.name === 'Object'
+        };
+      }
+    }),
+
   getLeaderboard: publicProcedure
     .input(z.object({ limit: z.number().min(1).max(100).default(10) }))
     .query(async ({ ctx, input }) => {
       console.log("🏆 [tRPC] getLeaderboard called with input:", JSON.stringify(input, null, 2));
+      console.log("🏆 [tRPC] Database available:", !!ctx.db);
+      console.log("🏆 [tRPC] Database type:", ctx.db.constructor.name);
       
       try {
         const scores = await ctx.db.quizScore.findMany({

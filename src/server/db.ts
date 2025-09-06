@@ -22,7 +22,10 @@ const createMockDb = (): PrismaClient => {
   } as unknown as PrismaClient;
 };
 
-export const db: PrismaClient = env.DATABASE_URL
+// Use DATABASE_POSTGRES_URL_NO_SSL if available, otherwise fall back to DATABASE_URL
+const databaseUrl = env.DATABASE_POSTGRES_URL_NO_SSL || env.DATABASE_URL;
+
+export const db: PrismaClient = databaseUrl
   ? (globalForPrisma.prisma ??
      new PrismaClient({
        log:
@@ -33,8 +36,11 @@ export const db: PrismaClient = env.DATABASE_URL
 // Log database connection status
 console.log("🗄️ [DB] Database connection initialized");
 console.log("🗄️ [DB] DATABASE_URL available:", !!env.DATABASE_URL);
-console.log("🗄️ [DB] Using mock database:", !env.DATABASE_URL);
+console.log("🗄️ [DB] DATABASE_POSTGRES_URL_NO_SSL available:", !!env.DATABASE_POSTGRES_URL_NO_SSL);
+console.log("🗄️ [DB] Using database URL:", databaseUrl ? "***SET***" : "NOT SET");
+console.log("🗄️ [DB] NODE_ENV:", env.NODE_ENV);
+console.log("🗄️ [DB] Using mock database:", !databaseUrl);
 
-if (env.NODE_ENV !== "production" && env.DATABASE_URL) {
+if (env.NODE_ENV !== "production" && databaseUrl) {
   globalForPrisma.prisma = db;
 }
