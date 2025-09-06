@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { api } from "~/trpc/react";
 import { quizQuestions } from "~/data/quiz-questions";
 
@@ -41,6 +41,8 @@ export function Quiz() {
 
   const [playerName, setPlayerName] = useState("");
   const [showNameInput, setShowNameInput] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+  const [randomizedQuestions, setRandomizedQuestions] = useState<RandomizedQuestion[]>([]);
 
   const utils = api.useUtils();
   const submitScoreMutation = api.quiz.submitScore.useMutation({
@@ -50,9 +52,10 @@ export function Quiz() {
     },
   });
 
-  // Pre-generate all randomized questions to prevent hydration mismatches
-  const randomizedQuestions = useMemo(() => {
-    return quizQuestions.map((question) => {
+  // Generate randomized questions only on client side after hydration
+  useEffect(() => {
+    setIsClient(true);
+    const randomized = quizQuestions.map((question) => {
       const shuffledAnswers = shuffleArray(question.answer);
       const correctAnswerIndex = shuffledAnswers.findIndex(
         (answer) => answer === question.answer[0] // Original correct answer (first in array)
@@ -64,6 +67,7 @@ export function Quiz() {
         correctAnswerIndex,
       };
     });
+    setRandomizedQuestions(randomized);
   }, []);
 
   // Get current question with randomized answers
@@ -181,6 +185,25 @@ export function Quiz() {
             >
               Take Quiz Again
             </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show loading state until client-side randomization is complete
+  if (!isClient || randomizedQuestions.length === 0) {
+    return (
+      <div className="w-full max-w-4xl mx-auto bg-white/10 backdrop-blur-sm rounded-xl p-8">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-white mb-6">FIRST Robotics Quiz</h2>
+          <div className="animate-pulse">
+            <div className="bg-white/20 h-8 rounded-lg mb-6"></div>
+            <div className="space-y-3">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="bg-white/20 h-16 rounded-lg"></div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
