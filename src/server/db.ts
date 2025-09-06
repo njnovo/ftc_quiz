@@ -23,7 +23,7 @@ const createMockDb = (): PrismaClient => {
 };
 
 // Use DATABASE_POSTGRES_URL_NO_SSL if available, otherwise fall back to DATABASE_URL
-const databaseUrl = env.DATABASE_POSTGRES_URL_NO_SSL || env.DATABASE_URL;
+const databaseUrl = env.DATABASE_POSTGRES_URL_NO_SSL ?? env.DATABASE_URL;
 
 export const db: PrismaClient = databaseUrl
   ? (globalForPrisma.prisma ??
