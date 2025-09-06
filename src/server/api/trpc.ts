@@ -28,6 +28,10 @@ import { db } from "~/server/db";
 export const createTRPCContext = async (opts: { headers: Headers }) => {
   const session = await auth();
 
+  console.log("🔧 [tRPC] Context created");
+  console.log("🔧 [tRPC] Session:", session ? "authenticated" : "anonymous");
+  console.log("🔧 [tRPC] Database available:", !!db);
+
   return {
     session,
     db,

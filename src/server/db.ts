@@ -30,6 +30,11 @@ export const db: PrismaClient = env.DATABASE_URL
      }))
   : createMockDb();
 
+// Log database connection status
+console.log("🗄️ [DB] Database connection initialized");
+console.log("🗄️ [DB] DATABASE_URL available:", !!env.DATABASE_URL);
+console.log("🗄️ [DB] Using mock database:", !env.DATABASE_URL);
+
 if (env.NODE_ENV !== "production" && env.DATABASE_URL) {
   globalForPrisma.prisma = db;
 }
