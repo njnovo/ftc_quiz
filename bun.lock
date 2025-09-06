@@ -4,6 +4,7 @@
     "": {
       "name": "robots-quiz",
       "dependencies": {
+        "robots-quiz": ".",
         "@prisma/client": "^6.15.0",
         "@t3-oss/env-nextjs": "^0.12.0",
         "@tanstack/react-query": "^5.69.0",
@@ -798,6 +799,8 @@
     "resolve-pkg-maps": ["resolve-pkg-maps@1.0.0", "", {}, "sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw=="],
 
     "reusify": ["reusify@1.1.0", "", {}, "sha512-g6QUff04oZpHs0eG5p83rFLhHeV00ug/Yf9nZM6fLeUrPguBTkTQOdpAWWspMh55TZfVQDPaN3NQJfbVRAxdIw=="],
+
+    "robots-quiz": ["robots-quiz@file:", { "dependencies": { "@prisma/client": "^6.15.0", "@t3-oss/env-nextjs": "^0.12.0", "@tanstack/react-query": "^5.69.0", "@trpc/client": "^11.0.0", "@trpc/react-query": "^11.0.0", "@trpc/server": "^11.0.0", "next": "^15.2.3", "next-auth": "5.0.0-beta.25", "prisma": "^6.15.0", "react": "^19.0.0", "react-dom": "^19.0.0", "server-only": "^0.0.1", "superjson": "^2.2.1", "zod": "^3.24.2" }, "devDependencies": { "@eslint/eslintrc": "^3.3.1", "@tailwindcss/postcss": "^4.0.15", "@types/node": "^20.14.10", "@types/react": "^19.0.0", "@types/react-dom": "^19.0.0", "eslint": "^9.23.0", "eslint-config-next": "^15.2.3", "postcss": "^8.5.3", "prettier": "^3.5.3", "prettier-plugin-tailwindcss": "^0.6.11", "tailwindcss": "^4.0.15", "typescript": "^5.8.2", "typescript-eslint": "^8.27.0" } }],
 
     "run-parallel": ["run-parallel@1.2.0", "", { "dependencies": { "queue-microtask": "^1.2.2" } }, "sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA=="],
 
