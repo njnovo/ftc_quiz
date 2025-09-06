@@ -1,9 +1,15 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { api } from "~/trpc/react";
 
 export function Leaderboard() {
   const { data: scores, isLoading } = api.quiz.getLeaderboard.useQuery({ limit: 10 });
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   if (isLoading) {
     return (
@@ -50,7 +56,7 @@ export function Leaderboard() {
                 <div>
                   <div className="font-semibold text-white">{score.name}</div>
                   <div className="text-sm text-white/70">
-                    {new Date(score.createdAt).toLocaleDateString()}
+                    {isClient ? new Date(score.createdAt).toLocaleDateString() : String(score.createdAt)}
                   </div>
                 </div>
               </div>

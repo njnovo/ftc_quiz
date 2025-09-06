@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { api } from "~/trpc/react";
 import { quizQuestions } from "~/data/quiz-questions";
 
@@ -42,23 +42,33 @@ export function Quiz() {
   const [playerName, setPlayerName] = useState("");
   const [showNameInput, setShowNameInput] = useState(false);
 
-  const submitScoreMutation = api.quiz.submitScore.useMutation();
+  const utils = api.useUtils();
+  const submitScoreMutation = api.quiz.submitScore.useMutation({
+    onSuccess: () => {
+      // Invalidate and refetch leaderboard when score is submitted
+      void utils.quiz.getLeaderboard.invalidate();
+    },
+  });
+
+  // Pre-generate all randomized questions to prevent hydration mismatches
+  const randomizedQuestions = useMemo(() => {
+    return quizQuestions.map((question) => {
+      const shuffledAnswers = shuffleArray(question.answer);
+      const correctAnswerIndex = shuffledAnswers.findIndex(
+        (answer) => answer === question.answer[0] // Original correct answer (first in array)
+      );
+
+      return {
+        question: question.question,
+        answers: shuffledAnswers,
+        correctAnswerIndex,
+      };
+    });
+  }, []);
 
   // Get current question with randomized answers
   const getCurrentQuestion = (questionIndex: number): RandomizedQuestion | null => {
-    const originalQuestion = quizQuestions[questionIndex];
-    if (!originalQuestion) return null;
-
-    const shuffledAnswers = shuffleArray(originalQuestion.answer);
-    const correctAnswerIndex = shuffledAnswers.findIndex(
-      (answer) => answer === originalQuestion.answer[0] // Original correct answer (first in array)
-    );
-
-    return {
-      question: originalQuestion.question,
-      answers: shuffledAnswers,
-      correctAnswerIndex,
-    };
+    return randomizedQuestions[questionIndex] ?? null;
   };
 
   const handleAnswerSelect = (answerIndex: number) => {
