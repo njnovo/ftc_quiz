@@ -15,8 +15,11 @@ The app is using:
 
 ### 2. Environment Variables ✅
 
-**Already configured!** Your `.env` file contains:
-- `DATABASE_URL` - Neon PostgreSQL connection string
+**For Development:** `DATABASE_URL` is now optional in development mode
+**For Production:** `DATABASE_URL` is required for Vercel deployment
+
+Your `.env` file should contain:
+- `DATABASE_URL` - Neon PostgreSQL connection string (optional in dev, required in production)
 - `AUTH_SECRET` - Authentication secret
 - `AUTH_DISCORD_ID` & `AUTH_DISCORD_SECRET` - Optional Discord auth
 
